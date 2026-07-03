@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Mundialista</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:
+                "Segoe UI Emoji",
+                "Segoe UI",
+                "Apple Color Emoji",
+                "Noto Color Emoji",
+                Arial,
+                sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #001b3a, #004225);
+            color: #fff
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #01152c;
+            position: sticky;
+            top: 0
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 15px;
+            list-style: none
+        }
+
+        .nav-item {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 8px
+        }
+
+        .active,
+        .nav-item:hover {
+            background: #ffd700;
+            color: #001b3a
+        }
+
+        .container {
+            padding: 30px
+        }
+
+        .content-section {
+            display: none
+        }
+
+        .active-view {
+            display: block
+        }
+
+        .match-card,
+        .group-card {
+            background: rgba(255, 255, 255, .08);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px
+        }
+
+        .match-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .team {
+            width: 35%;
+            font-size: 28px
+        }
+
+        .team-right {
+            text-align: right
+        }
+
+        .score {
+            font-size: 42px;
+            color: #ffd700
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #555;
+            text-align: center
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: auto;
+        }
+
+        /* TITULOS DE SECCIONES */
+        #partidos h2,
+        #grupos h2,
+        #estadisticas h2,
+        #simulacion h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #FFD700;
+            margin-bottom: 30px;
+            margin-top: 15px;
+        }
+
+        /* BORDES DE PARTIDOS */
+        .match-card {
+            background: rgba(255, 255, 255, .08);
+            border-radius: 18px;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 900px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .35);
+            transition: .3s;
+        }
+
+        .match-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, .12);
+        }
+
+        .match-card p {
+            text-align: center;
+            margin-top: 15px;
+            color: #dcdcdc;
+            font-size: 17px;
+        }
+
+        /* EQUIPOS */
+
+        .team {
+            width: 35%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .team img {
+            width: 100px;
+            height: 65px;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+
+        .team-right {
+            justify-content: flex-end;
+            display: flex;
+            align-items: center;
+        }
+
+        .team-right img {
+            order: 2;
+            margin-left: 10px;
+        }
+
+        /* MARCADOR */
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFD700;
+            min-width: 170px;
+            text-align: center;
+        }
+
+
+        /* TABLAS DE GRUPOS */
+
+        .group-card table {
+            width: 100%;
+            table-layout: fixed;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, .05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .group-card th:first-child,
+        .group-card td:first-child {
+            width: 65%;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .group-card th:nth-child(2),
+        .group-card td:nth-child(2),
+        .group-card th:nth-child(3),
+        .group-card td:nth-child(3),
+        .group-card th:nth-child(4),
+        .group-card td:nth-child(4) {
+            width: 11.6%;
+            text-align: center;
+        }
+
+        .group-card th {
+            background: #FFD700;
+            color: #001b3a;
+        }
+
+        .group-card td {
+            padding: 14px;
+        }
+
+        .group-card tr:hover {
+            background: rgba(255, 255, 255, .08);
+        }
+
+        /* SELECT GRUPOS */
+        .group-filter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        #groupRange {
+            background: #163b4d;
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #groupRange option {
+            background: #163b4d;
+            color: white;
+        }
+
+        .group-range {
+            display: none;
+        }
+
+        .group-range.active-range {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* ESTADÍSTICAS */
+
+        #estadisticas {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, .08);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .35);
+        }
+
+        #estadisticas table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        #estadisticas thead {
+            background: #FFD700;
+            color: #001b3a;
+        }
+
+        #estadisticas th {
+            padding: 16px;
+            font-size: 18px;
+        }
+
+        #estadisticas td {
+            padding: 15px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        #estadisticas tbody tr {
+            transition: .3s;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        #estadisticas tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, .04);
+        }
+
+        #estadisticas tbody tr:hover {
+            background: rgba(255, 215, 0, .15);
+            transform: scale(1.01);
+        }
+
+        .player {
+            text-align: left;
+            padding-left: 20px;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        .rank {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .gold {
+            background: #f5b301;
+        }
+
+        .silver {
+            background: #a7a7a7;
+        }
+
+        .bronze {
+            background: #b87333;
+        }
+
+        .rating {
+            font-weight: bold;
+            color: #00ff88;
+            font-size: 18px;
+        }
+
+        /* SECCION SECRETA */
+        .logo-title {
+            cursor: pointer;
+        }
+
+        #secret-zone.active-view {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+
+        .secret-container {
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .secret-container video {
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        .secret-text {
+            color: #FFD700;
+            margin-top: 20px;
+            font-size: 22px;
+        }
+
+        #back-btn {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .1);
+        }
+
+        /* AREA DE LA SECCION SECRETA */
+        .video-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .worldcup-logo {
+            width: 140px;
+            opacity: 0.9;
+            transition: 0.5s;
+        }
+
+        .worldcup-logo:hover {
+            transform: scale(1.08);
+        }
+
+        .secret-container video {
+            width: 850px;
+            border-radius: 20px;
+        }
+
+        .secret-text {
+            margin-top: 25px;
+            color: #FFD700;
+            font-size: 24px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+            line-height: 1.5;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header class="navbar">
+        <h2 id="secret-btn" class="logo-title">
+            🏆 FIFA WORLD CUP 2026
+        </h2>
+        <ul class="nav-menu">
+            <li class="nav-item active" data-target="partidos">Partidos</li>
+            <li class="nav-item" data-target="grupos">Grupos</li>
+            <li class="nav-item" data-target="estadisticas">Estadísticas</li>
+            <li class="nav-item" data-target="simulacion">Simulación</li>
+        </ul>
+    </header>
+
+    <section id="secret-zone" class="content-section">
+
+        <div class="secret-container">
+
+            <div class="video-area">
+
+                <img src="img/logomundial.png" class="worldcup-logo left-logo">
+
+                <video controls autoplay muted>
+                    <source src="video/mundial.mp4" type="video/mp4">
+                </video>
+
+                <img src="img/logomundial.png" class="worldcup-logo right-logo">
+
+            </div>
+
+            <p class="secret-text">
+                ⚽ El fútbol no es solo un juego,
+                es la pasión que une al mundo 🌎
+            </p>
+            <button id="back-btn">↩</button>
+
+        </div>
+
+    </section>
+
+    <div class="container">
+
+        <section id="partidos" class="content-section active-view">
+            <h2>⚽ 27 de Junio (Fin de Jornada)</h2>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/croacia.png">
+                        Croacia
+                    </div>
+                    <div class="score">2 - 1</div>
+                    <div class="team team-right">
+                        Ghana
+                        <img src="img/ghana.png">
+                    </div>
+                </div>
+                <p>Grupo L · Finalizado</p>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/panama.png">
+                        Panamá
+                    </div>
+                    <div class="score">0 - 2</div>
+                    <div class="team team-right">
+                        Inglaterra
+                        <img src="img/inglaterra.png">
+                    </div>
+                </div>
+                <p>Grupo L · Finalizado</p>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/colombia.png">
+                        Colombia
+                    </div>
+                    <div class="score">0 - 0</div>
+                    <div class="team team-right">
+                        Portugal
+                        <img src="img/portugal.png">
+                    </div>
+                </div>
+                <p>Grupo K · Finalizado</p>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/rdcongo.png">
+                        R.D. Congo
+                    </div>
+                    <div class="score">3 - 1</div>
+                    <div class="team team-right">
+                        Uzbekistán
+                        <img src="img/uzbekistan.png">
+                    </div>
+                </div>
+                <p>Grupo K · Finalizado</p>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/argelia.png">
+                        Argelia
+                    </div>
+                    <div class="score">3 - 3</div>
+                    <div class="team team-right">
+                        Austria
+                        <img src="img/austria.png">
+                    </div>
+                </div>
+                <p>Grupo J · Finalizado</p>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/jordania.png">
+                        Jordania
+                    </div>
+                    <div class="score">1 - 3</div>
+                    <div class="team team-right">
+                        Argentina
+                        <img src="img/argentina.png">
+                    </div>
+                </div>
+                <p>Grupo J · Finalizado</p>
+            </div>
+        </section>
+
+        <section id="grupos" class="content-section">
+            <h2>📋 Fase de Grupos</h2>
+            <div class="group-filter">
+
+                <select id="groupRange">
+                    <option value="range1">Grupo A - D</option>
+                    <option value="range2">Grupo E - H</option>
+                    <option value="range3">Grupo I - L</option>
+                </select>
+
+            </div>
+
+            <div id="range1" class="group-range active-range">
+
+                <div class="group-card">
+                    <h3>Grupo A</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇲🇽 México</td>
+                            <td>3</td>
+                            <td>+6</td>
+                            <td>9</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇿🇦 Sudáfrica</td>
+                            <td>3</td>
+                            <td>-1</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇰🇷 Corea del Sur</td>
+                            <td>3</td>
+                            <td>-1</td>
+                            <td>3</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇿 Chequia</td>
+                            <td>3</td>
+                            <td>-4</td>
+                            <td>1</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo B</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇭 Suiza</td>
+                            <td>3</td>
+                            <td>+4</td>
+                            <td>7</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇦 Canadá</td>
+                            <td>3</td>
+                            <td>+5</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇧🇦 Bosnia</td>
+                            <td>3</td>
+                            <td>-1</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇶🇦 Catar</td>
+                            <td>3</td>
+                            <td>-8</td>
+                            <td>1</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo C</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇧🇷 Brasil</td>
+                            <td>3</td>
+                            <td>+6</td>
+                            <td>7</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇲🇦 Marruecos</td>
+                            <td>3</td>
+                            <td>+3</td>
+                            <td>7</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇬🇧 Escocia</td>
+                            <td>3</td>
+                            <td>-3</td>
+                            <td>3</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇭🇹 Haití</td>
+                            <td>3</td>
+                            <td>-6</td>
+                            <td>0</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo D</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇺🇸 Estados Unidos</td>
+                            <td>3</td>
+                            <td>+4</td>
+                            <td>6</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇦🇺 Australia</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇵🇾 Paraguay</td>
+                            <td>3</td>
+                            <td>-2</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇹🇷 Turquía</td>
+                            <td>3</td>
+                            <td>-2</td>
+                            <td>3</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="range2" class="group-range">
+
+                <div class="group-card">
+                    <h3>Grupo E</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇩🇪 Alemania</td>
+                            <td>3</td>
+                            <td>+6</td>
+                            <td>6</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇮 Costa de Marfil</td>
+                            <td>3</td>
+                            <td>+2</td>
+                            <td>6</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇪🇨 Ecuador</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇼 Curazao</td>
+                            <td>3</td>
+                            <td>-8</td>
+                            <td>1</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo F</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇳🇱 Países Bajos</td>
+                            <td>3</td>
+                            <td>+6</td>
+                            <td>7</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇯🇵 Japón</td>
+                            <td>3</td>
+                            <td>+4</td>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇸🇪 Suecia</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇹🇳 Túnez</td>
+                            <td>3</td>
+                            <td>-10</td>
+                            <td>0</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo G</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇧🇪 Bélgica</td>
+                            <td>3</td>
+                            <td>+4</td>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇪🇬 Egipto</td>
+                            <td>3</td>
+                            <td>+2</td>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇮🇷 Irán</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>3</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇳🇿 Nueva Zelanda</td>
+                            <td>3</td>
+                            <td>-6</td>
+                            <td>1</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo H</h3>
+                    <table>
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+                        <tr>
+                            <td>🇪🇸 España</td>
+                            <td>3</td>
+                            <td>+6</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>🇨🇻 Cabo Verde</td>
+                            <td>3</td>
+                            <td>+2</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td>🇺🇾 Uruguay</td>
+                            <td>3</td>
+                            <td>-1</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td>🇸🇦 Arabia Saudita</td>
+                            <td>3</td>
+                            <td>-7</td>
+                            <td>1</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div id="range3" class="group-range">
+
+                <div class="group-card">
+                    <h3>Grupo I</h3>
+                    <table>
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+                        <tr>
+                            <td>🇫🇷 Francia</td>
+                            <td>3</td>
+                            <td>+8</td>
+                            <td>9</td>
+                        </tr>
+                        <tr>
+                            <td>🇳🇴 Noruega</td>
+                            <td>3</td>
+                            <td>+2</td>
+                            <td>6</td>
+                        </tr>
+                        <tr>
+                            <td>🇸🇳 Senegal</td>
+                            <td>3</td>
+                            <td>+2</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>🇮🇶 Irak</td>
+                            <td>3</td>
+                            <td>-11</td>
+                            <td>0</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo J</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇦🇷 Argentina</td>
+                            <td>3</td>
+                            <td>+7</td>
+                            <td>9</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇦🇹 Austria</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇩🇿 Argelia</td>
+                            <td>3</td>
+                            <td>-2</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇯🇴 Jordania</td>
+                            <td>3</td>
+                            <td>-5</td>
+                            <td>0</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo K</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇴 Colombia</td>
+                            <td>3</td>
+                            <td>+3</td>
+                            <td>7</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇵🇹 Portugal</td>
+                            <td>3</td>
+                            <td>+5</td>
+                            <td>5</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇨🇩 R.D. Congo</td>
+                            <td>3</td>
+                            <td>+1</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇺🇿 Uzbekistán</td>
+                            <td>3</td>
+                            <td>-9</td>
+                            <td>0</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="group-card">
+                    <h3>Grupo L</h3>
+
+                    <table>
+
+                        <tr>
+                            <th>Selección</th>
+                            <th>PJ</th>
+                            <th>DG</th>
+                            <th>PTS</th>
+                        </tr>
+
+                        <tr>
+                            <td>🇬🇧 Inglaterra</td>
+                            <td>3</td>
+                            <td>+4</td>
+                            <td>7</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇭🇷 Croacia</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>6</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇬🇭 Ghana</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td>4</td>
+                        </tr>
+
+                        <tr>
+                            <td>🇵🇦 Panamá</td>
+                            <td>3</td>
+                            <td>-4</td>
+                            <td>0</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="estadisticas" class="content-section">
+
+            <h2>🏅 Ranking de Jugadores</h2>
+
+            <div class="stats-card">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Jugador</th>
+                            <th>⚽ Goles</th>
+                            <th>🎯 Asistencias</th>
+                            <th>⭐ Nota</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                <div class="rank gold">1</div>
+                            </td>
+                            <td class="player">Lionel Messi</td>
+                            <td>6</td>
+                            <td>2</td>
+                            <td class="rating">9.43</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank silver">2</div>
+                            </td>
+                            <td class="player">Kylian Mbappé</td>
+                            <td>4</td>
+                            <td>2</td>
+                            <td class="rating">8.99</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank bronze">3</div>
+                            </td>
+                            <td class="player">Ousmane Dembélé</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td class="rating">8.42</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">4</div>
+                            </td>
+                            <td class="player">Vinícius Jr.</td>
+                            <td>4</td>
+                            <td>1</td>
+                            <td class="rating">8.37</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">5</div>
+                            </td>
+                            <td class="player">Erling Haaland</td>
+                            <td>4</td>
+                            <td>0</td>
+                            <td class="rating">8.12</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">6</div>
+                            </td>
+                            <td class="player">Deniz Undav</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td class="rating">7.88</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">7</div>
+                            </td>
+                            <td class="player">Johan Manzambi</td>
+                            <td>3</td>
+                            <td>1</td>
+                            <td class="rating">7.81</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">8</div>
+                            </td>
+                            <td class="player">Ismaila Sarr</td>
+                            <td>3</td>
+                            <td>1</td>
+                            <td class="rating">7.80</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">9</div>
+                            </td>
+                            <td class="player">Brian Brobbey</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="rating">7.76</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="rank">10</div>
+                            </td>
+                            <td class="player">Matheus Cunha</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td class="rating">7.73</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <section id="simulacion" class="content-section">
+            <h2>🤖 Predicciones(IA)</h2>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/paises-bajos.png">
+                        Países Bajos
+                    </div>
+                    <div>
+                        <div class="sim-controls">
+
+                            <div class="score" id="s1">
+                                - : -
+                            </div>
+
+                            <div>
+
+                                <button onclick="simular('s1')">
+                                    🎲 Simular
+                                </button>
+
+                                <button onclick="borrarMarcador('s1')">
+                                    🗑 Borrar
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="team team-right">
+                        Marruecos
+                        <img src="img/marruecos.png">
+                    </div>
+                </div>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/portugal.png">
+                        Portugal
+                    </div>
+                    <div>
+                        <div class="sim-controls">
+
+                            <div class="score" id="s2">
+                                - : -
+                            </div>
+
+                            <div>
+
+                                <button onclick="simular('s2')">
+                                    🎲 Simular
+                                </button>
+
+                                <button onclick="borrarMarcador('s2')">
+                                    🗑 Borrar
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="team team-right">
+                        Croacia
+                        <img src="img/croacia.png">
+                    </div>
+                </div>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/brasil.png">
+                        Brasil
+                    </div>
+                    <div>
+                        <div class="sim-controls">
+
+                            <div class="score" id="s3">
+                                - : -
+                            </div>
+
+                            <div>
+
+                                <button onclick="simular('s3')">
+                                    🎲 Simular
+                                </button>
+
+                                <button onclick="borrarMarcador('s3')">
+                                    🗑 Borrar
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="team team-right">
+                        Japón
+                        <img src="img/japon.png">
+                    </div>
+                </div>
+            </div>
+            <div class="match-card">
+                <div class="match-row">
+                    <div class="team">
+                        <img src="img/mexico.png">
+                        México
+                    </div>
+                    <div>
+                        <div class="sim-controls">
+
+                            <div class="score" id="s4">
+                                - : -
+                            </div>
+
+                            <div>
+
+                                <button onclick="simular('s4')">
+                                    🎲 Simular
+                                </button>
+
+                                <button onclick="borrarMarcador('s4')">
+                                    🗑 Borrar
+                                </button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="team team-right">
+                        Ecuador
+                        <img src="img/ecuador.png">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="secret-zone" class="content-section">
+
+            <div class="secret-container">
+
+                <video controls autoplay muted>
+                    <source src="video/mundial.mp4" type="video/mp4">
+                </video>
+
+                <p class="secret-text">
+                    "El fútbol no es solo un juego, es la pasión que une al mundo."
+                </p>
+
+                <button id="back-btn">↩</button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <script>
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.onclick = () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(i => i.classList.remove('active-view'));
+                item.classList.add('active');
+                document.getElementById(item.dataset.target).classList.add('active-view');
+            }
+        });
+
+        const secretBtn = document.getElementById("secret-btn");
+        const menu = document.querySelector(".nav-menu");
+
+        secretBtn.onclick = () => {
+
+            document.querySelectorAll('.content-section')
+                .forEach(sec => sec.classList.remove('active-view'));
+
+            document.getElementById('secret-zone')
+                .classList.add('active-view');
+
+            menu.style.display = "none";
+        };
+
+        document.getElementById("back-btn").onclick = () => {
+
+            document.getElementById('secret-zone')
+                .classList.remove('active-view');
+
+            document.getElementById('partidos')
+                .classList.add('active-view');
+
+            menu.style.display = "flex";
+        };
+
+        const selector = document.getElementById("groupRange");
+
+        selector.addEventListener("change", function () {
+
+            document.querySelectorAll(".group-range").forEach(group => {
+                group.classList.remove("active-range");
+            });
+
+            document.getElementById(this.value)
+                .classList.add("active-range");
+
+        });
+
+        function simular(id) { document.getElementById(id).innerText = `${Math.floor(Math.random() * 6)} - ${Math.floor(Math.random() * 6)}`; } function borrarMarcador(id) { document.getElementById(id).innerText = '- : -'; }
+    </script>
+</body>

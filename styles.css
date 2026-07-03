@@ -1,0 +1,152 @@
+/* Configuración General y Tipografía */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #001b3a, #004225);
+    overflow: hidden;
+}
+
+/* Contenedor Efecto Cristal (Glassmorphism) */
+.login-container {
+    position: relative;
+    width: 400px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.login-box h2 {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.login-box .subtitle {
+    color: #94a3b8;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 35px;
+}
+
+/* Cajas de Entrada Animadas (Floating Labels) */
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #334155;
+    transition: border-color 0.3s ease;
+}
+
+.input-group i {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 35px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f8fafc;
+    font-size: 15px;
+}
+
+/* Efecto de Etiqueta Flotante */
+.input-group label {
+    position: absolute;
+    left: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 15px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Animación cuando el input tiene foco o texto */
+.input-group input:focus~label,
+.input-group input:not(:placeholder-shown)~label {
+    top: -5px;
+    font-size: 12px;
+    color: #FFD700;
+}
+
+.input-group input:focus,
+.input-group input:focus~i {
+    color: #FFD700;
+}
+
+.input-group:has(input:focus) {
+    border-color: #FFD700;
+}
+
+/* Botón de Ingreso */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #FFD700;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    color: #001b3a;;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-login:hover {
+    background: #e6c200;
+}
+
+.btn-login:active {
+    transform: scale(0.98);
+}
+
+/* Mensaje de Error */
+.error-message {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    color: #f43f5e;
+    font-size: 13px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5s);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
